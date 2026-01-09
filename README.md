@@ -169,6 +169,7 @@ To complete secure deletion process:
 > [!NOTE]
 > USE LIVE SYSTEM (boot from USB) when wiping OS drive!
 > Cannot wipe drive with running OS!
+> **Unmount before encrypting:** `sudo umount /dev/sdb1`
 
 ```bash
 # Create a test partition or use existing device
@@ -254,6 +255,10 @@ openssl enc -d -aes-256-cbc \
 > - **Encrypted file is unreadable** without the key - permanently destroyed data
 
 ## Use Cases
+- Selling, gifting, or trading in devices
+- Disposing of old hard drives and SSDs
+- Irrevocable deletion of sensitive information
+- GDPR compliance (Art. 17 - Right to erasure)
 
 **File Encryption - Selling laptop/PC:**
 ```bash
@@ -285,19 +290,6 @@ sudo datanuke /dev/sdb        # Entire drive
 sudo datanuke /dev/sdb1       # Single partition
 sudo datanuke /dev/nvme0n1    # NVMe drive
 ```
-
-**Use cases for device encryption:**
-- Selling, gifting, or trading in devices
-- Disposing of old hard drives and SSDs
-- Irrevocable deletion of sensitive information
-- GDPR compliance (Art. 17 - Right to erasure)
-
-**Device Encryption Warnings:**
-- **Unmount before encrypting:** `sudo umount /dev/sdb1`
-- **Use live system** if target contains running OS (boot from Ubuntu Live USB)
-- **Data destroyed if key not saved** - no recovery possible without key
-- **"YES" confirmation required** - tool prevents accidental operations
-- **After encryption:** Device becomes unreadable gibberish - can be safely formatted, reused, or physically destroyed
 
 ## Contributing
 
