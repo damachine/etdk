@@ -53,6 +53,70 @@ Based on recommendations: **"Encrypt-then-Delete-Key"** [BSI CON.6](https://www.
 - **No bloat**: Reject features that don't serve core mission
 - **ETDK follows the Unix philosophy: Do one thing and do it well**
 
+## Use Case
+
+- Selling, gifting, or trading in devices
+- Disposing of old hard drives and SSDs
+- Irrevocable deletion of sensitive information
+- GDPR compliance (Art. 17 - Right to erasure)
+- Browser history and cache deletion
+- Email archive secure deletion
+- Personal documents cleanup
+
+**Browser History & Cache - Secure deletion:**
+```bash
+# Firefox
+sudo etdk ~/.mozilla/firefox/*.default-release/places.sqlite  # History
+sudo etdk ~/.cache/mozilla/firefox/                           # Cache
+
+# Chrome/Chromium
+sudo etdk ~/.config/google-chrome/Default/History
+sudo etdk ~/.cache/google-chrome/
+
+# Safari (macOS)
+sudo etdk ~/Library/Safari/History.db
+sudo etdk ~/Library/Caches/com.apple.Safari/
+```
+
+**Email Archive - Secure deletion:**
+```bash
+# Thunderbird
+sudo etdk ~/.thunderbird/*/Mail/                    # All emails
+sudo etdk ~/.thunderbird/*/ImapMail/
+
+# Apple Mail (macOS)
+sudo etdk ~/Library/Mail/V10/
+
+# Outlook (Linux with Wine)
+sudo etdk ~/.wine/drive_c/users/*/Application\ Data/Microsoft/Outlook/
+```
+
+**File Encryption - Selling laptop/PC:**
+```bash
+# Encrypt all files in Documents folder
+find ~/Documents -type f -exec sudo etdk {} \;
+
+# Encrypt specific file types
+find ~/Pictures -type f \( -name "*.jpg" -o -name "*.png" \) -exec sudo etdk {} \;
+```
+
+**File Encryption - GDPR compliance (right to erasure):**
+```bash
+# Works with any file type: CSV, PDF, databases, etc.
+sudo etdk customer_data.csv
+sudo etdk invoices.pdf
+sudo etdk database.sqlite
+rm customer_data.csv invoices.pdf database.sqlite
+```
+
+**Device Encryption - Wiping entire drive before sale/disposal:**
+```bash
+# Examples (requires root):
+sudo etdk /dev/sdb        # Entire drive
+sudo etdk /dev/sdb1       # Single partition
+sudo etdk /dev/nvme0n1    # NVMe drive
+```
+
 ## Installation
 
 ### Linux
@@ -261,70 +325,6 @@ openssl enc -d -aes-256-cbc \
 > - **5-pass secure wipe** - key destroyed from RAM (0x00 → 0xFF → random → 0x00 → volatile)
 > - **AES-256-CBC** - NIST standard, computationally infeasible to break
 > - **BSI compliant** - follows German Federal Office for Information Security recommendations
-
-## Use Case
-
-- Selling, gifting, or trading in devices
-- Disposing of old hard drives and SSDs
-- Irrevocable deletion of sensitive information
-- GDPR compliance (Art. 17 - Right to erasure)
-- Browser history and cache deletion
-- Email archive secure deletion
-- Personal documents cleanup
-
-**Browser History & Cache - Secure deletion:**
-```bash
-# Firefox
-sudo etdk ~/.mozilla/firefox/*.default-release/places.sqlite  # History
-sudo etdk ~/.cache/mozilla/firefox/                           # Cache
-
-# Chrome/Chromium
-sudo etdk ~/.config/google-chrome/Default/History
-sudo etdk ~/.cache/google-chrome/
-
-# Safari (macOS)
-sudo etdk ~/Library/Safari/History.db
-sudo etdk ~/Library/Caches/com.apple.Safari/
-```
-
-**Email Archive - Secure deletion:**
-```bash
-# Thunderbird
-sudo etdk ~/.thunderbird/*/Mail/                    # All emails
-sudo etdk ~/.thunderbird/*/ImapMail/
-
-# Apple Mail (macOS)
-sudo etdk ~/Library/Mail/V10/
-
-# Outlook (Linux with Wine)
-sudo etdk ~/.wine/drive_c/users/*/Application\ Data/Microsoft/Outlook/
-```
-
-**File Encryption - Selling laptop/PC:**
-```bash
-# Encrypt all files in Documents folder
-find ~/Documents -type f -exec sudo etdk {} \;
-
-# Encrypt specific file types
-find ~/Pictures -type f \( -name "*.jpg" -o -name "*.png" \) -exec sudo etdk {} \;
-```
-
-**File Encryption - GDPR compliance (right to erasure):**
-```bash
-# Works with any file type: CSV, PDF, databases, etc.
-sudo etdk customer_data.csv
-sudo etdk invoices.pdf
-sudo etdk database.sqlite
-rm customer_data.csv invoices.pdf database.sqlite
-```
-
-**Device Encryption - Wiping entire drive before sale/disposal:**
-```bash
-# Examples (requires root):
-sudo etdk /dev/sdb        # Entire drive
-sudo etdk /dev/sdb1       # Single partition
-sudo etdk /dev/nvme0n1    # NVMe drive
-```
 
 ## Contributing
 
