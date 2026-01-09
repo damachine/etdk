@@ -71,5 +71,6 @@ coolerdash-bin/
 # Ignore vscode AI rules
 .github/copilot-instructions.md
 .github/instructions/copilot-instructions.md
+.github/instructions/best_practices.md
 .github/instructions/BEST_PRACTICES.instructions.md
 .github/instructions/codacy.instructions.md

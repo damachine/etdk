@@ -2,10 +2,36 @@
 
 **Makes data powerless** | Secure data deletion through encryption and key destruction.
 
-ETDK implements the official [BSI (Bundesamt für Sicherheit in der Informationstechnik)](https://www.bsi.bund.de/) recommendation for secure data deletion: **Encrypt data with strong encryption (AES-256-CBC), then securely delete all keys**. This method provides reliable protection against unauthorized recovery — provided the key is actually deleted, not just marked as deleted.
+---
 
-> *"Wenn Sie die Daten auf dem Datenträger oder Gerät verschlüsselt haben, reicht es aus, alle Schlüssel sicher zu löschen."*  
-> — [BSI CON.6](https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/IT-GS-Kompendium_Einzel_PDFs_2023/03_CON_Konzepte_und_Vorgehensweisen/CON_6_Loeschen_und_Vernichten_Edition_2023.pdf?__blob=publicationFile&v=3) (German Federal Office for Information Security)
+> [!CAUTION]
+> **! READ AND UNDERSTAND THIS ENTIRE DOCUMENT BEFORE USING THIS TOOL !**
+>
+> This tool **permanently destroys data** by encrypting it and then securely deleting the encryption key. If you don't save the key when it's displayed, **your data is gone forever** - no recovery is possible, not even with data recovery services.
+
+---
+
+Selling your laptop? Disposing of an old drive? Need to permanently delete sensitive files?
+
+ETDK encrypts your data with military-grade encryption (AES-256-CBC), then destroys the only key. Without the key, your data is cryptographically impossible to recover.
+
+**One command. Gone forever.**
+```bash
+sudo etdk sensitive_document.pdf
+# Data is now permanent encrypted garbage - worthless without the key
+rm sensitive_document.pdf  # Normal delete of encrypted file
+```
+
+## Why ETDK?
+
+| Traditional "Delete" | ETDK |
+|---------------------|------|
+| Can be recovered | Cryptographically impossible to recover |
+| Slow (35-pass wipe) | Fast (single encryption pass) |
+| Breaks SSDs | SSD-safe |
+| Requires special tools | Works everywhere |
+
+---
 
 [![Platform: Linux](https://img.shields.io/badge/Platform-Linux-blue.svg)](https://www.linux.org/)
 [![Platform: macOS](https://img.shields.io/badge/Platform-macOS-lightgrey.svg)](https://www.apple.com/macos/)
@@ -15,41 +41,38 @@ ETDK implements the official [BSI (Bundesamt für Sicherheit in der Informations
 [![Language: C](https://img.shields.io/badge/Language-C-00599C.svg)](https://en.wikipedia.org/wiki/C_(programming_language))
 [![BSI Compliant](https://img.shields.io/badge/BSI-Compliant-green.svg)](https://www.bsi.bund.de/)
 
----
-
-> [!CAUTION]
-> **READ AND UNDERSTAND THIS ENTIRE DOCUMENT BEFORE USING THIS TOOL!**
->
-> This tool **permanently destroys data** by encrypting it and then securely deleting the encryption key. If you don't save the key when it's displayed, **your data is gone forever** - no recovery is possible, not even with data recovery services.
->
-> - **This is NOT a backup tool** - make backups first
-> - **This is NOT reversible** - unless you save the encryption key
-> - **Test on non-critical data first** - understand how it works before using on important data
-> - **Always double-check the target** - verify you're encrypting the correct file/device before confirming
-
----
-
 ## What It Does
 
-Encrypt → Trash → Gone
+Encrypt => Trash => Gone
 
-**Implements the BSI method: "Daten verschlüsseln und Schlüssel wegwerfen" - Encrypt data and throw away the key**
+ETDK implements the official [BSI (Bundesamt für Sicherheit in der Informationstechnik)](https://www.bsi.bund.de/) recommendation for secure data deletion: **Encrypt data with strong encryption (AES-256-CBC), then securely delete all keys**. This method provides reliable protection against unauthorized recovery — provided the key is actually deleted, not just marked as deleted.
+
+> *"Wenn Sie die Daten auf dem Datenträger oder Gerät verschlüsselt haben, reicht es aus, alle Schlüssel sicher zu löschen."*  
+> — [BSI CON.6](https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/IT-GS-Kompendium_Einzel_PDFs_2023/03_CON_Konzepte_und_Vorgehensweisen/CON_6_Loeschen_und_Vernichten_Edition_2023.pdf?__blob=publicationFile&v=3) (German Federal Office for Information Security)
 
 Encrypts files or entire devices in-place with AES-256-CBC, displays the encryption key once, then permanently wipes the key from RAM. Without the key, the encrypted data is permanently irrecoverable!
 
 ## Why This Method?
 
-- **Cryptographically secure**: AES-256, not just pattern overwriting
+- **Cryptographically secure**: AES-256-CBC, not just pattern overwriting
 - **Fast**: Single pass vs. multi-pass wiping (10-20x faster)
 - **SSD-safe**: No wear leveling issues
 - **Universal**: Works on all storage types
 
 ## Core Principles
 
+ETDK follows the Unix philosophy: **Do one thing and do it well** - secure data deletion through encryption and key destruction.
+
 - **Keep it simple**: POSIX-compliant, minimal dependencies
 - **Security first**: Focus on correct implementation of BSI method
 - **No bloat**: Reject features that don't serve core mission
-- **ETDK follows the Unix philosophy: Do one thing and do it well**
+- **In-place encryption**: Same filename, encrypted content - works with any file type
+- **Universal compatibility**: Files and entire devices (SSD, HDD, USB drives, partitions)
+- **Zero disk traces**: Key stored in RAM only, never touches disk (mlock-protected)
+- **One-time key display**: Key shown once on screen - save it now or lose access forever
+- **Cryptographic strength**: AES-256-CBC (NIST standard, computationally infeasible to break)
+- **Thorough key destruction**: 5-pass secure wipe from RAM (0x00 => 0xFF => random => 0x00 => volatile pointers)
+- **BSI compliant**: Follows German Federal Office for Information Security recommendations
 
 ## Use Case
 
@@ -333,17 +356,6 @@ openssl enc -d -aes-256-cbc \
 > - **Never save the key on the same system** you're trying to securely delete data from
 > - **Store keys offline** (paper, secure external storage) if recovery is needed
 > - **For true secure deletion:** Don't save the key at all - just let it be destroyed
-
-> [!NOTE]
-> **Security Notes**
->
-> - **File is encrypted in-place** - same filename, encrypted content
-> - **Works with files and entire devices** - any file type (text, images, videos, databases, archives) or block device (SSD, HDD, USB drives, partitions)
-> - **Key stored in RAM only** - never touches disk, locked with mlock()
-> - **Key displayed once** - write it down or lose it forever (3-second pause)
-> - **5-pass secure wipe** - key destroyed from RAM (0x00 → 0xFF → random → 0x00 → volatile)
-> - **AES-256-CBC** - NIST standard, computationally infeasible to break
-> - **BSI compliant** - follows German Federal Office for Information Security recommendations
 
 ## Contributing
 
