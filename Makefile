@@ -1,4 +1,4 @@
-# DataNuke - Simple Makefile wrapper for CMake
+# ETDK - Encrypt and Delete Key
 # Makes installation easier with classic Unix-style commands
 
 .PHONY: all build release debug install uninstall clean help
@@ -8,13 +8,13 @@ all: release
 
 # Build in release mode (optimized, no debug symbols)
 release:
-	@echo "Building DataNuke (Release)..."
+	@echo "Building ETDK (Release)..."
 	cmake -B build -DCMAKE_BUILD_TYPE=Release
 	cmake --build build -j4
 
 # Build in debug mode (with debug symbols)
 debug:
-	@echo "Building DataNuke (Debug)..."
+	@echo "Building ETDK (Debug)..."
 	cmake -B build -DCMAKE_BUILD_TYPE=Debug
 	cmake --build build -j4
 
@@ -23,13 +23,13 @@ build: release
 
 # Install to system (/usr/bin)
 install: release
-	@echo "Installing DataNuke..."
+	@echo "Installing ETDK..."
 	sudo cmake --install build
 
 # Uninstall from system
 uninstall:
-	@echo "Uninstalling DataNuke..."
-	sudo rm -f /usr/bin/datanuke
+	@echo "Uninstalling ETDK..."
+	sudo rm -f /usr/bin/etdk
 
 # Clean build artifacts
 clean:
@@ -38,7 +38,7 @@ clean:
 
 # Show available targets
 help:
-	@echo "DataNuke - Makefile targets:"
+	@echo "ETDK - Makefile targets:"
 	@echo ""
 	@echo "  make              - Build in release mode (default)"
 	@echo "  make release      - Build optimized release version"

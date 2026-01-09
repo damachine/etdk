@@ -1,12 +1,12 @@
 /*
- * DataNuke - Secure Data Deletion Tool
+ * ETDK - Secure Data Deletion Tool
  * According to BSI recommendations (Bundesamt für Sicherheit in der Informationstechnik)
  *
  * Method: Encrypt data with AES-256, then securely delete encryption key
  * This implements the BSI-recommended "Encrypt and throw away key" method
  */
 
-#include "datanuke.h"
+#include "etdk.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,7 +16,7 @@
  * @param program_name The name of the program executable
  */
 void print_usage(const char *program_name) {
-    printf("DataNuke v%s - Secure Data Deletion Tool\n", DATANUKE_VERSION);
+    printf("ETDK v%s - Encrypt and Delete Key\n", ETDK_VERSION);
     printf("\"Makes data powerless\"\n");
     printf("Based on BSI recommendations (Germany)\n\n");
     printf("Usage: %s <file|device>\n\n", program_name);
@@ -39,7 +39,7 @@ void print_usage(const char *program_name) {
 }
 
 /**
- * @brief Main entry point for DataNuke application
+ * @brief Main entry point for ETDK application
  *
  * Implements the BSI-recommended "Encrypt-then-Delete-Key" method:
  * 1. Encrypt file/device with AES-256-CBC
@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
     }
 
     printf("\n");
-    printf("DataNuke v%s - Secure Data Deletion (BSI-compliant)\n", DATANUKE_VERSION);
+    printf("ETDK v%s - Encrypt and Delete Key\n", ETDK_VERSION);
     printf("\n");
     printf("Target: %s\n", target_file);
     printf("Type:   %s\n", is_device ? "Block Device" : "Regular File");
@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
 
     if (is_device) {
         uint64_t size;
-        if (platform_get_device_size(target_file, &size) == DATANUKE_SUCCESS) {
+        if (platform_get_device_size(target_file, &size) == ETDK_SUCCESS) {
             printf("Device size: %.2f GB (%llu bytes)\n\n", size / (1024.0 * 1024.0 * 1024.0),
                    (unsigned long long)size);
         }
@@ -98,7 +98,7 @@ int main(int argc, char *argv[]) {
     printf("\n");
 
     crypto_context_t ctx;
-    if (crypto_init(&ctx) != DATANUKE_SUCCESS) {
+    if (crypto_init(&ctx) != ETDK_SUCCESS) {
         fprintf(stderr, "Failed to initialize cryptography\n");
         return 1;
     }
@@ -112,7 +112,7 @@ int main(int argc, char *argv[]) {
         // Encrypt entire block device
         result = crypto_encrypt_device(target_file, &ctx);
 
-        if (result != DATANUKE_SUCCESS) {
+        if (result != ETDK_SUCCESS) {
             fprintf(stderr, "Device encryption failed\n");
             platform_unlock_memory(&ctx, sizeof(ctx));
             crypto_cleanup(&ctx);
@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) {
 
         result = crypto_encrypt_file(target_file, temp_path, &ctx);
 
-        if (result != DATANUKE_SUCCESS) {
+        if (result != ETDK_SUCCESS) {
             fprintf(stderr, "Encryption failed\n");
             platform_unlock_memory(&ctx, sizeof(ctx));
             crypto_cleanup(&ctx);
@@ -150,7 +150,7 @@ int main(int argc, char *argv[]) {
     // Wipe key from memory
     result = crypto_secure_wipe_key(&ctx);
 
-    if (result != DATANUKE_SUCCESS) {
+    if (result != ETDK_SUCCESS) {
         fprintf(stderr, "Key wiping failed\n");
         platform_unlock_memory(&ctx, sizeof(ctx));
         crypto_cleanup(&ctx);

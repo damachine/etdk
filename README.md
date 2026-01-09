@@ -1,8 +1,8 @@
-# DataNuke
+# etdk - "Encrypt-then-Delete-Key"
 
 **Makes data powerless** | Secure data deletion through encryption and key destruction.
 
-DataNuke implements the official [BSI (Bundesamt für Sicherheit in der Informationstechnik)](https://www.bsi.bund.de/) recommendation for secure data deletion: **Encrypt data with strong encryption (AES-256-CBC), then securely delete all keys**. This method provides reliable protection against unauthorized recovery — provided the key is actually deleted, not just marked as deleted.
+ETDK implements the official [BSI (Bundesamt für Sicherheit in der Informationstechnik)](https://www.bsi.bund.de/) recommendation for secure data deletion: **Encrypt data with strong encryption (AES-256-CBC), then securely delete all keys**. This method provides reliable protection against unauthorized recovery — provided the key is actually deleted, not just marked as deleted.
 
 > *"Wenn Sie die Daten auf dem Datenträger oder Gerät verschlüsselt haben, reicht es aus, alle Schlüssel sicher zu löschen."*  
 > — [BSI CON.6](https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/IT-GS-Kompendium_Einzel_PDFs_2023/03_CON_Konzepte_und_Vorgehensweisen/CON_6_Loeschen_und_Vernichten_Edition_2023.pdf?__blob=publicationFile&v=3) (German Federal Office for Information Security)
@@ -52,7 +52,7 @@ Based on [BSI (Bundesamt für Sicherheit in der Informationstechnik)](https://ww
 - **Keep it simple**: POSIX-compliant, minimal dependencies
 - **Security first**: Focus on correct implementation of BSI method
 - **No bloat**: Reject features that don't serve core mission
-- **DataNuke follows the Unix philosophy: Do one thing and do it well**
+- **ETDK follows the Unix philosophy: Do one thing and do it well**
 
 ## Installation
 
@@ -106,10 +106,10 @@ cmake --install build
 
 ```bash
 # Encrypt a file
-sudo datanuke <file>
+sudo etdk <file>
 
 # Encrypt a block device (entire drive/partition)
-sudo datanuke <device>
+sudo etdk <device>
 ```
 > [!NOTE]
 > **You can safely format, delete, reuse, or physically destroy the file/device.**  
@@ -123,14 +123,14 @@ sudo datanuke <device>
 
 ```bash
 echo "Sensitive data" > secret.txt
-sudo datanuke secret.txt
+sudo etdk secret.txt
 ```
 
 <details>
   <summary>Output:</summary>
 
 ```
-DataNuke v1.0.0 - Secure Data Deletion (BSI-compliant)
+ETDK v1.0.0 - Secure Data Deletion (BSI-compliant)
 
 Target: secret.txt
 Type:   Regular File
@@ -167,13 +167,13 @@ To complete secure deletion process:
 
 ```bash
 # Create a test partition or use existing device
-sudo datanuke /dev/sdb1
+sudo etdk /dev/sdb1
 ```
 <details>
   <summary>Output:</summary>
 
 ```
-DataNuke v1.0.0 - Secure Data Deletion (BSI-compliant)
+ETDK v1.0.0 - Secure Data Deletion (BSI-compliant)
 
 Target: /dev/sdb1
 Type:   Block Device
@@ -265,27 +265,27 @@ openssl enc -d -aes-256-cbc \
 **File Encryption - Selling laptop/PC:**
 ```bash
 # Encrypt all files in Documents folder
-find ~/Documents -type f -exec sudo datanuke {} \;
+find ~/Documents -type f -exec sudo etdk {} \;
 
 # Encrypt specific file types
-find ~/Pictures -type f \( -name "*.jpg" -o -name "*.png" \) -exec sudo datanuke {} \;
+find ~/Pictures -type f \( -name "*.jpg" -o -name "*.png" \) -exec sudo etdk {} \;
 ```
 
 **File Encryption - GDPR compliance (right to erasure):**
 ```bash
 # Works with any file type: CSV, PDF, databases, etc.
-sudo datanuke customer_data.csv
-sudo datanuke invoices.pdf
-sudo datanuke database.sqlite
+sudo etdk customer_data.csv
+sudo etdk invoices.pdf
+sudo etdk database.sqlite
 rm customer_data.csv invoices.pdf database.sqlite
 ```
 
 **Device Encryption - Wiping entire drive before sale/disposal:**
 ```bash
 # Examples (requires root):
-sudo datanuke /dev/sdb        # Entire drive
-sudo datanuke /dev/sdb1       # Single partition
-sudo datanuke /dev/nvme0n1    # NVMe drive
+sudo etdk /dev/sdb        # Entire drive
+sudo etdk /dev/sdb1       # Single partition
+sudo etdk /dev/nvme0n1    # NVMe drive
 ```
 
 ## Contributing

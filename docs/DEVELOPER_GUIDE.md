@@ -1,4 +1,4 @@
-# DataNuke Developer Guide
+# ETDK Developer Guide
 
 Technical documentation for contributors.
 
@@ -19,7 +19,7 @@ src/
 └── platform.c   # OS-specific memory operations
 
 include/
-└── datanuke.h   # Public API
+└── etdk.h   # Public API
 ```
 
 ## Build
@@ -115,8 +115,8 @@ sleep(3);  // Silent pause, no countdown
 1. Fork repo
 2. Create feature branch
 3. Make changes
-4. Test with: `./build/datanuke test.txt`
-5. Test device mode (requires root): `sudo ./build/datanuke /dev/loop0`
+4. Test with: `./build/etdk test.txt`
+5. Test device mode (requires root): `sudo ./build/etdk /dev/loop0`
 6. Submit PR
 
 ## Testing
@@ -124,7 +124,7 @@ sleep(3);  // Silent pause, no countdown
 ```bash
 # Manual test
 echo "test" > test.txt
-sudo ./build/datanuke test.txt
+sudo ./build/etdk test.txt
 hexdump -C test.txt  # Should be encrypted
 
 # Decrypt with saved key
@@ -154,4 +154,4 @@ openssl enc -d -aes-256-cbc -K <key> -iv <iv> -in test.txt -out recovered.txt
 
 ---
 
-For issues: [GitHub Issues](https://github.com/damachine/datanuke/issues)
+For issues: [GitHub Issues](https://github.com/damachine/etdk/issues)

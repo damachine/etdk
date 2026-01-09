@@ -39,7 +39,7 @@ gnupg/
 *.bak
 *.env
 
-# DataNuke test files and artifacts
+# ETDK test files and artifacts
 *.encrypted
 *.img
 test*

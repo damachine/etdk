@@ -1,9 +1,9 @@
 /*
- * DataNuke - Secure Data Deletion Tool
+ * ETDK - Secure Data Deletion Tool
  * Crypto Module - AES-256 Encryption according to BSI recommendations
  */
 
-#include "datanuke.h"
+#include "etdk.h"
 #include <openssl/err.h>
 #include <openssl/evp.h>
 #include <openssl/rand.h>
@@ -19,26 +19,26 @@
  * using OpenSSL's RAND_bytes() function.
  *
  * @param ctx Pointer to crypto_context_t structure to initialize
- * @return DATANUKE_SUCCESS on success, DATANUKE_ERROR_CRYPTO on failure
+ * @return ETDK_SUCCESS on success, ETDK_ERROR_CRYPTO on failure
  */
 int crypto_init(crypto_context_t *ctx) {
     if (!ctx)
-        return DATANUKE_ERROR_CRYPTO;
+        return ETDK_ERROR_CRYPTO;
 
     memset(ctx, 0, sizeof(crypto_context_t));
 
     // Generate random key
-    if (crypto_generate_key(ctx->key, AES_KEY_SIZE) != DATANUKE_SUCCESS) {
-        return DATANUKE_ERROR_CRYPTO;
+    if (crypto_generate_key(ctx->key, AES_KEY_SIZE) != ETDK_SUCCESS) {
+        return ETDK_ERROR_CRYPTO;
     }
 
     // Generate random IV
     if (RAND_bytes(ctx->iv, AES_BLOCK_SIZE) != 1) {
         fprintf(stderr, "Error generating IV: %s\n", ERR_error_string(ERR_get_error(), NULL));
-        return DATANUKE_ERROR_CRYPTO;
+        return ETDK_ERROR_CRYPTO;
     }
 
-    return DATANUKE_SUCCESS;
+    return ETDK_SUCCESS;
 }
 
 /**
@@ -49,20 +49,20 @@ int crypto_init(crypto_context_t *ctx) {
  *
  * @param key Pointer to buffer where key will be stored
  * @param key_size Size of the key in bytes (must be AES_KEY_SIZE)
- * @return DATANUKE_SUCCESS on success, DATANUKE_ERROR_CRYPTO on failure
+ * @return ETDK_SUCCESS on success, ETDK_ERROR_CRYPTO on failure
  */
 int crypto_generate_key(uint8_t *key, size_t key_size) {
     if (!key || key_size != AES_KEY_SIZE) {
-        return DATANUKE_ERROR_CRYPTO;
+        return ETDK_ERROR_CRYPTO;
     }
 
     // Use OpenSSL's cryptographically secure random number generator
     if (RAND_bytes(key, key_size) != 1) {
         fprintf(stderr, "Error generating key: %s\n", ERR_error_string(ERR_get_error(), NULL));
-        return DATANUKE_ERROR_CRYPTO;
+        return ETDK_ERROR_CRYPTO;
     }
 
-    return DATANUKE_SUCCESS;
+    return ETDK_SUCCESS;
 }
 
 /**
@@ -74,24 +74,24 @@ int crypto_generate_key(uint8_t *key, size_t key_size) {
  * @param input_path Path to the input file to encrypt
  * @param output_path Path where encrypted file will be written
  * @param ctx Pointer to initialized crypto_context_t with key and IV
- * @return DATANUKE_SUCCESS on success, error code on failure
+ * @return ETDK_SUCCESS on success, error code on failure
  */
 int crypto_encrypt_file(const char *input_path, const char *output_path, crypto_context_t *ctx) {
     if (!input_path || !output_path || !ctx) {
-        return DATANUKE_ERROR_CRYPTO;
+        return ETDK_ERROR_CRYPTO;
     }
 
     FILE *input = fopen(input_path, "rb");
     if (!input) {
         perror("Cannot open input file");
-        return DATANUKE_ERROR_IO;
+        return ETDK_ERROR_IO;
     }
 
     FILE *output = fopen(output_path, "wb");
     if (!output) {
         perror("Cannot open output file");
         fclose(input);
-        return DATANUKE_ERROR_IO;
+        return ETDK_ERROR_IO;
     }
 
     EVP_CIPHER_CTX *cipher_ctx = EVP_CIPHER_CTX_new();
@@ -99,7 +99,7 @@ int crypto_encrypt_file(const char *input_path, const char *output_path, crypto_
         fprintf(stderr, "Error creating cipher context\n");
         fclose(input);
         fclose(output);
-        return DATANUKE_ERROR_CRYPTO;
+        return ETDK_ERROR_CRYPTO;
     }
 
     /* Initialize AES-256-CBC encryption
@@ -111,7 +111,7 @@ int crypto_encrypt_file(const char *input_path, const char *output_path, crypto_
         EVP_CIPHER_CTX_free(cipher_ctx);
         fclose(input);
         fclose(output);
-        return DATANUKE_ERROR_CRYPTO;
+        return ETDK_ERROR_CRYPTO;
     }
 
     /* Encrypt file in 4KB chunks
@@ -128,7 +128,7 @@ int crypto_encrypt_file(const char *input_path, const char *output_path, crypto_
             EVP_CIPHER_CTX_free(cipher_ctx);
             fclose(input);
             fclose(output);
-            return DATANUKE_ERROR_CRYPTO;
+            return ETDK_ERROR_CRYPTO;
         }
         fwrite(outbuf, 1, outlen, output);
     }
@@ -142,7 +142,7 @@ int crypto_encrypt_file(const char *input_path, const char *output_path, crypto_
         EVP_CIPHER_CTX_free(cipher_ctx);
         fclose(input);
         fclose(output);
-        return DATANUKE_ERROR_CRYPTO;
+        return ETDK_ERROR_CRYPTO;
     }
     fwrite(outbuf, 1, outlen, output);
 
@@ -150,7 +150,7 @@ int crypto_encrypt_file(const char *input_path, const char *output_path, crypto_
     fclose(input);
     fclose(output);
 
-    return DATANUKE_SUCCESS;
+    return ETDK_SUCCESS;
 }
 
 /**
@@ -200,11 +200,11 @@ void crypto_display_key(const crypto_context_t *ctx) {
  * This follows BSI recommendations for secure key destruction.
  *
  * @param ctx Pointer to crypto_context_t containing key to wipe
- * @return DATANUKE_SUCCESS on success, DATANUKE_ERROR_CRYPTO on failure
+ * @return ETDK_SUCCESS on success, ETDK_ERROR_CRYPTO on failure
  */
 int crypto_secure_wipe_key(crypto_context_t *ctx) {
     if (!ctx)
-        return DATANUKE_ERROR_CRYPTO;
+        return ETDK_ERROR_CRYPTO;
 
     /* Pass 1: Overwrite with zeros
      * Clears any existing data with a known pattern
@@ -244,7 +244,7 @@ int crypto_secure_wipe_key(crypto_context_t *ctx) {
         viv[i] = 0;
     }
 
-    return DATANUKE_SUCCESS;
+    return ETDK_SUCCESS;
 }
 
 /**
@@ -273,33 +273,33 @@ void crypto_cleanup(crypto_context_t *ctx) {
  *
  * @param device_path Path to the block device (e.g., /dev/sdb)
  * @param ctx Pointer to initialized crypto_context_t with key and IV
- * @return DATANUKE_SUCCESS on success, error code on failure
+ * @return ETDK_SUCCESS on success, error code on failure
  */
 int crypto_encrypt_device(const char *device_path, crypto_context_t *ctx) {
     if (!device_path || !ctx) {
-        return DATANUKE_ERROR_CRYPTO;
+        return ETDK_ERROR_CRYPTO;
     }
 
     // Open device for read/write with synchronous I/O
     FILE *device = fopen(device_path, "r+b");
     if (!device) {
         perror("Cannot open device");
-        return DATANUKE_ERROR_IO;
+        return ETDK_ERROR_IO;
     }
 
     // Get device size
     uint64_t device_size = 0;
-    if (platform_get_device_size(device_path, &device_size) != DATANUKE_SUCCESS) {
+    if (platform_get_device_size(device_path, &device_size) != ETDK_SUCCESS) {
         fprintf(stderr, "Error getting device size\n");
         fclose(device);
-        return DATANUKE_ERROR_IO;
+        return ETDK_ERROR_IO;
     }
 
     EVP_CIPHER_CTX *cipher_ctx = EVP_CIPHER_CTX_new();
     if (!cipher_ctx) {
         fprintf(stderr, "Error creating cipher context\n");
         fclose(device);
-        return DATANUKE_ERROR_CRYPTO;
+        return ETDK_ERROR_CRYPTO;
     }
 
     // Initialize AES-256-CBC encryption
@@ -307,7 +307,7 @@ int crypto_encrypt_device(const char *device_path, crypto_context_t *ctx) {
         fprintf(stderr, "Error initializing encryption: %s\n", ERR_error_string(ERR_get_error(), NULL));
         EVP_CIPHER_CTX_free(cipher_ctx);
         fclose(device);
-        return DATANUKE_ERROR_CRYPTO;
+        return ETDK_ERROR_CRYPTO;
     }
 
     // Process device in 1MB chunks for efficiency
@@ -321,7 +321,7 @@ int crypto_encrypt_device(const char *device_path, crypto_context_t *ctx) {
         free(outbuf);
         EVP_CIPHER_CTX_free(cipher_ctx);
         fclose(device);
-        return DATANUKE_ERROR_MEMORY;
+        return ETDK_ERROR_MEMORY;
     }
 
     uint64_t processed = 0;
@@ -341,7 +341,7 @@ int crypto_encrypt_device(const char *device_path, crypto_context_t *ctx) {
             free(outbuf);
             EVP_CIPHER_CTX_free(cipher_ctx);
             fclose(device);
-            return DATANUKE_ERROR_CRYPTO;
+            return ETDK_ERROR_CRYPTO;
         }
 
         // Seek back to write position
@@ -354,7 +354,7 @@ int crypto_encrypt_device(const char *device_path, crypto_context_t *ctx) {
             free(outbuf);
             EVP_CIPHER_CTX_free(cipher_ctx);
             fclose(device);
-            return DATANUKE_ERROR_IO;
+            return ETDK_ERROR_IO;
         }
 
         // Flush to ensure data is written
@@ -381,5 +381,5 @@ int crypto_encrypt_device(const char *device_path, crypto_context_t *ctx) {
     EVP_CIPHER_CTX_free(cipher_ctx);
     fclose(device);
 
-    return DATANUKE_SUCCESS;
+    return ETDK_SUCCESS;
 }

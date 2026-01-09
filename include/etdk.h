@@ -1,24 +1,24 @@
 /**
- * @file datanuke.h
- * @brief DataNuke - Secure Data Deletion Tool
+ * @file etdk.h
+ * @brief ETDK - Encrypt-then-Delete-Key (Secure Data Deletion Tool)
  * @details Makes data powerless
  *
- * This header defines the public API for DataNuke, a BSI-compliant
+ * This header defines the public API for ETDK, a BSI-compliant
  * secure data deletion tool that uses the "Encrypt-then-Delete-Key"
  * method to make data permanently irrecoverable.
  *
  * @version 1.0.0
- * @author DataNuke Contributors
+ * @author ETDK Contributors
  */
 
-#ifndef DATANUKE_H
-#define DATANUKE_H
+#ifndef ETDK_H
+#define ETDK_H
 
 #include <stddef.h>
 #include <stdint.h>
 
-/** @brief Version string for DataNuke */
-#define DATANUKE_VERSION "1.0.0"
+/** @brief Version string for ETDK */
+#define ETDK_VERSION "1.0.0"
 
 /** @brief AES-256 key size in bytes (256 bits) */
 #define AES_KEY_SIZE 32
@@ -28,24 +28,24 @@
 
 /**
  * @defgroup ReturnCodes Return Codes
- * @brief Status codes returned by DataNuke functions
+ * @brief Status codes returned by ETDK functions
  * @{
  */
 
 /** @brief Operation completed successfully */
-#define DATANUKE_SUCCESS 0
+#define ETDK_SUCCESS 0
 
 /** @brief I/O error (file/device access failed) */
-#define DATANUKE_ERROR_IO -1
+#define ETDK_ERROR_IO -1
 
 /** @brief Cryptographic operation failed */
-#define DATANUKE_ERROR_CRYPTO -2
+#define ETDK_ERROR_CRYPTO -2
 
 /** @brief Memory allocation or locking failed */
-#define DATANUKE_ERROR_MEMORY -3
+#define ETDK_ERROR_MEMORY -3
 
 /** @brief Platform-specific operation failed */
-#define DATANUKE_ERROR_PLATFORM -4
+#define ETDK_ERROR_PLATFORM -4
 
 /** @} */ // end of ReturnCodes
 
@@ -72,7 +72,7 @@ typedef struct {
 /**
  * @brief Initialize crypto context with random key and IV
  * @param ctx Pointer to crypto_context_t to initialize
- * @return DATANUKE_SUCCESS or DATANUKE_ERROR_CRYPTO
+ * @return ETDK_SUCCESS or ETDK_ERROR_CRYPTO
  */
 int crypto_init(crypto_context_t *ctx);
 
@@ -80,7 +80,7 @@ int crypto_init(crypto_context_t *ctx);
  * @brief Generate cryptographically secure random key
  * @param key Buffer to store generated key
  * @param key_size Size of key in bytes (must be AES_KEY_SIZE)
- * @return DATANUKE_SUCCESS or DATANUKE_ERROR_CRYPTO
+ * @return ETDK_SUCCESS or ETDK_ERROR_CRYPTO
  */
 int crypto_generate_key(uint8_t *key, size_t key_size);
 
@@ -89,7 +89,7 @@ int crypto_generate_key(uint8_t *key, size_t key_size);
  * @param input_path Path to input file
  * @param output_path Path to output encrypted file
  * @param ctx Initialized crypto context
- * @return DATANUKE_SUCCESS, DATANUKE_ERROR_IO, or DATANUKE_ERROR_CRYPTO
+ * @return ETDK_SUCCESS, ETDK_ERROR_IO, or ETDK_ERROR_CRYPTO
  */
 int crypto_encrypt_file(const char *input_path, const char *output_path, crypto_context_t *ctx);
 
@@ -97,7 +97,7 @@ int crypto_encrypt_file(const char *input_path, const char *output_path, crypto_
  * @brief Encrypt block device using AES-256-CBC
  * @param device_path Path to block device (e.g., /dev/sdb)
  * @param ctx Initialized crypto context
- * @return DATANUKE_SUCCESS, DATANUKE_ERROR_IO, or DATANUKE_ERROR_CRYPTO
+ * @return ETDK_SUCCESS, ETDK_ERROR_IO, or ETDK_ERROR_CRYPTO
  */
 int crypto_encrypt_device(const char *device_path, crypto_context_t *ctx);
 
@@ -110,7 +110,7 @@ void crypto_display_key(const crypto_context_t *ctx);
 /**
  * @brief Securely wipe encryption key using 7-pass Gutmann method
  * @param ctx Crypto context containing key to wipe
- * @return DATANUKE_SUCCESS or DATANUKE_ERROR_CRYPTO
+ * @return ETDK_SUCCESS or ETDK_ERROR_CRYPTO
  */
 int crypto_secure_wipe_key(crypto_context_t *ctx);
 
@@ -132,7 +132,7 @@ void crypto_cleanup(crypto_context_t *ctx);
  * @brief Get size of block device in bytes
  * @param device_path Path to device
  * @param size Pointer to store device size
- * @return DATANUKE_SUCCESS or DATANUKE_ERROR_PLATFORM
+ * @return ETDK_SUCCESS or ETDK_ERROR_PLATFORM
  */
 int platform_get_device_size(const char *device_path, uint64_t *size);
 
@@ -147,7 +147,7 @@ int platform_is_device(const char *path);
  * @brief Lock memory pages to prevent swapping to disk
  * @param addr Starting address of memory region
  * @param len Length of memory region in bytes
- * @return DATANUKE_SUCCESS or DATANUKE_ERROR_MEMORY
+ * @return ETDK_SUCCESS or ETDK_ERROR_MEMORY
  */
 int platform_lock_memory(void *addr, size_t len);
 
@@ -155,10 +155,10 @@ int platform_lock_memory(void *addr, size_t len);
  * @brief Unlock previously locked memory pages
  * @param addr Starting address of memory region
  * @param len Length of memory region in bytes
- * @return DATANUKE_SUCCESS or DATANUKE_ERROR_MEMORY
+ * @return ETDK_SUCCESS or ETDK_ERROR_MEMORY
  */
 int platform_unlock_memory(void *addr, size_t len);
 
 /** @} */ // end of Platform
 
-#endif // DATANUKE_H
+#endif // ETDK_H

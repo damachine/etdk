@@ -1,4 +1,4 @@
-# DataNuke Roadmap
+# ETDK Roadmap
 
 ## Version 1.0 (Current - Released)
 - [x] AES-256-CBC encryption
@@ -57,6 +57,6 @@ Previous roadmap versions mentioned:
 - HSM integration
 - Enterprise features
 
-These features have been **removed from the roadmap** as they add complexity without clear benefits for the core use case of secure data deletion. DataNuke follows the Unix philosophy: **do one thing and do it well**.
+These features have been **removed from the roadmap** as they add complexity without clear benefits for the core use case of secure data deletion. ETDK follows the Unix philosophy: **do one thing and do it well**.
 
 The tool focuses on being a simple, reliable, POSIX-compliant tool for securely deleting data through the BSI-recommended "Encrypt-then-Delete-Key" method.

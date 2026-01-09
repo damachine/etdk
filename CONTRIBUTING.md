@@ -1,6 +1,6 @@
-# Contributing to DataNuke
+# Contributing to ETDK
 
-Thank you for your interest in DataNuke!
+Thank you for your interest in ETDK!
 
 ## How can I contribute?
 
@@ -37,8 +37,8 @@ Thank you for your interest in DataNuke!
 ## Setting Up Development Environment
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/datanuke.git
-cd datanuke
+git clone https://github.com/YOUR_USERNAME/etdk.git
+cd etdk
 mkdir build && cd build
 cmake ..
 make

@@ -1,5 +1,5 @@
 # ==============================================================================
-# DataNuke - Secure Data Deletion Tool
+# ETDK - Encrypt and Delete Key
 # Makes data powerless
 #
 # CMake Build Configuration for cross-platform compilation
@@ -8,7 +8,7 @@
 # ==============================================================================
 
 cmake_minimum_required(VERSION 3.15)
-project(datanuke VERSION 1.0.0 LANGUAGES C)
+project(etdk VERSION 1.0.0 LANGUAGES C)
 
 # Use C11 standard for modern C features and security
 # C11 provides: _Static_assert, anonymous structs/unions, aligned_alloc
@@ -69,8 +69,8 @@ set(SOURCES
     src/platform.c
 )
 
-# Build datanuke executable
-add_executable(datanuke ${SOURCES})
+# Build etdk executable
+add_executable(etdk ${SOURCES})
 
 # ==============================================================================
 # Dependencies and Linking
@@ -80,14 +80,14 @@ add_executable(datanuke ${SOURCES})
 # Requires: OpenSSL 1.1.0+ or 3.x
 # Links: libcrypto (EVP_*, RAND_*, ERR_* functions)
 find_package(OpenSSL REQUIRED)
-target_link_libraries(datanuke OpenSSL::Crypto)
+target_link_libraries(etdk OpenSSL::Crypto)
 
 # Platform-specific system libraries
 # Linux: pthread for thread-safe OpenSSL operations
 if(UNIX AND NOT APPLE)
-    target_link_libraries(datanuke pthread)
+    target_link_libraries(etdk pthread)
 endif()
 
 # Installation to /usr/bin
 set(CMAKE_INSTALL_PREFIX "/usr" CACHE PATH "Install prefix" FORCE)
-install(TARGETS datanuke DESTINATION bin)
+install(TARGETS etdk DESTINATION bin)
