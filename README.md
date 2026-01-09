@@ -1,4 +1,4 @@
-# etdk - "Encrypt-then-Delete-Key"
+# ETDK - Encrypt-then-Delete-Key
 
 **Makes data powerless** | Secure data deletion through encryption and key destruction.
 
