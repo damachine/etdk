@@ -36,7 +36,6 @@ ETDK follows the Unix philosophy: **Do one thing and do it well** - secure data 
 - **Thorough key destruction**: 5-pass secure wipe from RAM (0x00 => 0xFF => random => 0x00 => volatile pointers)
 - **One-time key display**: Key shown once on screen - save it now or lose access forever
 - **No bloat**: Reject features that don't serve core mission
-- 
 - **Fast**: Single pass vs. multi-pass wiping (10-20x faster)
 - **SSD-safe**: No wear leveling issues
 - **Universal**: Works on all storage types (SSD, HDD, USB drives, partitions, files)
