@@ -219,7 +219,7 @@ To complete secure deletion process:
 - Encryption key was displayed on screen (one-time only)
 - Key was wiped from RAM with 7-pass Gutmann method (0x00, 0xFF, random, 0x00, volatile)
 - Memory protection: POSIX mlock() prevented key from swapping to disk
-- Device is now gibberish - can be formatted, reused, or physically destroyed
+- File/Device is now gibberish - can be formatted, reused, or physically destroyed
 - Without the key, data recovery is computationally infeasible
 
 ## Data Recovery
