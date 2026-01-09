@@ -306,7 +306,7 @@ openssl enc -d -aes-256-cbc \
 
 **For permanent deletion:** Don't save the key.
 
-> [!DANGER]
+> [!CAUTION]
 > **CRITICAL: Key Storage Security**
 >
 > **IF YOU SAVE THE KEY, YOUR DATA IS NOT DELETED - IT'S JUST ENCRYPTED!**
