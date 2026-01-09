@@ -243,10 +243,31 @@ openssl enc -d -aes-256-cbc \
 
 **For permanent deletion:** Don't save the key.
 
-> [!WARNING]
-> **Key Storage Security**
+> [!DANGER]
+> **CRITICAL: Key Storage Security**
 >
-> If you save the encryption key on a compromised system, your data may NOT be securely deleted. An attacker with access to the system could recover both the encrypted data and the key, defeating the entire purpose of secure deletion.
+> **IF YOU SAVE THE KEY, YOUR DATA IS NOT DELETED - IT'S JUST ENCRYPTED!**
+>
+> Saving the encryption key defeats the entire purpose of secure data deletion. An attacker who gains access to both the encrypted data AND the saved key can recover everything.
+>
+> **NEVER do this:**
+> - Save key to a text file on the same system
+> - Store key in password manager on compromised system
+> - Email the key to yourself
+> - Save key in cloud storage (Dropbox, Google Drive, etc.)
+> - Write key in a document on the same device
+> - Screenshot the key
+> - Copy key to clipboard (may be logged)
+>
+> **Only save the key if:**
+> - You need to recover the data later
+> - You store it OFFLINE (paper, secure external storage)
+> - You store it on a DIFFERENT, TRUSTED system
+> - You use proper encryption for key storage (e.g., KeePass on separate device)
+>
+> **For true secure deletion:** Don't save the key at all - just watch it being displayed, then let ETDK destroy it from memory.
+>
+> **Remember:** Encrypted data + saved key = NOT DELETED, just encrypted!
 >
 > - **Never save the key on the same system** you're trying to securely delete data from
 > - **Store keys offline** (paper, secure external storage) if recovery is needed
