@@ -2,11 +2,16 @@
 
 **Makes data powerless**
 
-```
 Encrypt → Trash → Gone
-```
+
+#
 
 BSI-compliant secure data deletion through encryption and key destruction.
+
+DataNuke implements the official [BSI (Bundesamt für Sicherheit in der Informationstechnik)](https://www.bsi.bund.de/) recommendation for secure data deletion: **Encrypt data with strong encryption (AES-256-CBC), then securely delete all keys**. This method provides reliable protection against unauthorized recovery — provided the key is actually deleted, not just marked as deleted.
+
+> *"Wenn Sie die Daten auf dem Datenträger oder Gerät verschlüsselt haben, reicht es aus, alle Schlüssel sicher zu löschen."*  
+> — BSI CON.6 (German Federal Office for Information Security)
 
 **Cross-platform:** Linux, macOS, Windows, BSD.
 
@@ -158,6 +163,10 @@ To complete secure deletion process:
 
 ### Example: Block Device Encryption
 
+> [!WARNING]
+> USE LIVE SYSTEM (boot from USB) when wiping OS drive!
+> Cannot wipe drive with running OS!
+
 ```bash
 # Create a test partition or use existing device
 sudo datanuke /dev/sdb1
@@ -286,15 +295,6 @@ sudo datanuke /dev/nvme0n1    # NVMe drive
 - **Data destroyed if key not saved** - no recovery possible without key
 - **"YES" confirmation required** - tool prevents accidental operations
 - **After encryption:** Device becomes unreadable gibberish - can be safely formatted, reused, or physically destroyed
-
-## BSI Method: "Daten verschlüsseln und Schlüssel wegwerfen"
-
-DataNuke implements the official [BSI (Bundesamt für Sicherheit in der Informationstechnik)](https://www.bsi.bund.de/) recommendation for secure data deletion: **Encrypt data with strong encryption (AES-256-CBC), then securely delete all keys**. This method provides reliable protection against unauthorized recovery — provided the key is actually deleted, not just marked as deleted.
-
-> *"Wenn Sie die Daten auf dem Datenträger oder Gerät verschlüsselt haben, reicht es aus, alle Schlüssel sicher zu löschen."*  
-> — BSI CON.6 (German Federal Office for Information Security)
-
-**Implementation:** AES-256-CBC encryption → Display key once → 7-pass Gutmann wipe → RAM-only storage (POSIX mlock)
 
 ## Contributing
 
