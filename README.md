@@ -3,7 +3,7 @@
 **Makes data powerless**
 
 ```
-Encrypt  →  Trash  →  Gone          
+Encrypt → Trash → Gone
 ```
 
 BSI-compliant secure data deletion through encryption and key destruction.
