@@ -130,7 +130,7 @@ sudo etdk secret.txt
   <summary>Output:</summary>
 
 ```
-ETDK v1.0.0 - Secure Data Deletion (BSI-compliant)
+ETDK - Encrypt and Delete Key
 
 Target: secret.txt
 Type:   Regular File
@@ -173,7 +173,7 @@ sudo etdk /dev/sdb1
   <summary>Output:</summary>
 
 ```
-ETDK v1.0.0 - Secure Data Deletion (BSI-compliant)
+ETDK - Encrypt and Delete Key
 
 Target: /dev/sdb1
 Type:   Block Device
