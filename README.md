@@ -4,8 +4,6 @@
 
 Encrypt → Trash → Gone
 
-#
-
 BSI-compliant secure data deletion through encryption and key destruction.
 
 DataNuke implements the official [BSI (Bundesamt für Sicherheit in der Informationstechnik)](https://www.bsi.bund.de/) recommendation for secure data deletion: **Encrypt data with strong encryption (AES-256-CBC), then securely delete all keys**. This method provides reliable protection against unauthorized recovery — provided the key is actually deleted, not just marked as deleted.
